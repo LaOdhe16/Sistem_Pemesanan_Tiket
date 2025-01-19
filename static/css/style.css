@@ -1,0 +1,215 @@
+/* Global Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;  /* Menjaga agar footer tetap di bawah */
+}
+
+.container {
+    flex-grow: 1;
+}
+
+/* Footer Styling */
+footer {
+    background-color: #4A90E2;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+    font-size: 0.9rem;
+}
+
+/* Navbar Styling */
+header .navbar {
+    background-color: #4A90E2;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header .navbar nav a {
+    color: white;
+    margin-left: 1.5rem;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+header .navbar nav a:hover {
+    text-decoration: underline;
+}
+
+/* Hero Section */
+.hero-section {
+    background-color: #6A1B9A;
+    color: white;
+    padding: 3rem 2rem;
+    text-align: center;
+}
+
+.hero-section h2 {
+    font-size: 2rem;
+}
+
+.hero-section p {
+    font-size: 1.2rem;
+}
+
+/* Event Card Styling */
+.event-card, .card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: transform 0.3s ease-in-out;
+}
+
+.event-card:hover, .card:hover {
+    transform: scale(1.05);
+}
+
+.event-card h3, .card h3 {
+    color: #4A90E2;
+    font-size: 1.5rem;
+}
+
+.event-card p, .card p {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Tombol Detail */
+.btn-detail {
+    background-color: #4A90E2;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1rem;
+    display: inline-block;
+    margin-top: 1rem;
+}
+
+.btn-detail:hover {
+    background-color: #357ABD;
+}
+
+/* Admin Form Styling */
+.form-card, .events-list {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.form-group button {
+    background-color: #4A90E2;
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 1rem;
+}
+
+.form-group button:hover {
+    background-color: #357ABD;
+}
+
+/* Event Detail Card Styling */
+.event-detail-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    margin: 2rem 0;
+}
+
+.event-detail-card h2 {
+    color: #4A90E2;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.event-detail-card h3 {
+    color: #6A1B9A;
+    font-size: 1.5rem;
+    margin-top: 1rem;
+}
+
+.event-detail-card p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.5;
+    margin-top: 1rem;
+}
+
+/* Form Input and Button in Detail */
+.event-detail-card form {
+    margin-top: 2rem;
+}
+
+.event-detail-card form input,
+.event-detail-card form button {
+    width: 100%;
+    padding: 0.8rem;
+    margin-top: 1rem;
+    font-size: 1rem;
+    border-radius: 5px;
+}
+
+.event-detail-card form button {
+    background-color: #6A1B9A;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.event-detail-card form button:hover {
+    background-color: #4A90E2;
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .hero-section {
+        padding: 2rem;
+    }
+
+    .container {
+        padding: 1rem;
+    }
+
+    footer {
+        font-size: 1rem;
+    }
+
+    .event-detail-card {
+        padding: 1rem;
+    }
+}
