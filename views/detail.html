@@ -1,18 +1,17 @@
-{% extends "base.html" %}
-{% block title %}Detail Acara{% endblock %}
-{% block content %}
-    <div class="event-detail-card">
-        <h2>{{ event[1] }}</h2>
-        <p><strong>Tanggal:</strong> {{ event[2] }}</p>
-        <p><strong>Lokasi:</strong> {{ event[3] }}</p>
+{% extends 'base.html' %}
 
-        <h3>Pesan Tiket</h3>
-        <form action="/book/{{ event[0] }}" method="POST">
-            <label for="name">Nama:</label><br>
-            <input type="text" id="name" name="name" required><br>
-            <label for="email">Email:</label><br>
-            <input type="email" id="email" name="email" required><br><br>
-            <button type="submit">Pesan</button>
-        </form>
-    </div>
+{% block content %}
+    <h1>{{ event[1] }}</h1>
+    <p>Date: {{ event[2] }}</p>
+    <p>Time: {{ event[3] }}</p>
+    <p>Location: {{ event[4] }}</p>
+    <p>{{ event[6] }}</p>
+
+    <h2>Book Tickets</h2>
+    <form action="{{ url_for('book_ticket', event_id=event[0]) }}" method="POST">
+        <input type="text" name="user_name" placeholder="Your Name" required><br>
+        <input type="email" name="user_email" placeholder="Your Email" required><br>
+        <input type="number" name="ticket_count" placeholder="Number of Tickets" required><br>
+        <button type="submit">Book Now</button>
+    </form>
 {% endblock %}

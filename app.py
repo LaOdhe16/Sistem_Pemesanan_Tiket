@@ -1,67 +1,102 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for
 import mysql.connector
+from mysql.connector import Error
 
 app = Flask(__name__, template_folder='views')
-app.secret_key = "secret_key"
 
-# Konfigurasi koneksi database lokal
-conn = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",  # Sesuaikan password Anda
-    database="ticket_booking"
-)
-cursor = conn.cursor()
+# Koneksi ke database
+def get_db_connection():
+    hostname = "85bq3.h.filess.io"
+    database = "pesantiket_readbandis"
+    port = "3306"
+    username = "pesantiket_readbandis"
+    password = "4e91b84ea24ea854125e8ca69180250fff7dffe4"
 
-# Routes
+    try:
+        connection = mysql.connector.connect(
+            host=hostname,
+            database=database,
+            user=username,
+            password=password,
+            port=port
+        )
+        if connection.is_connected():
+            return connection
+    except Error as e:
+        print("Error while connecting to MySQL", e)
+        return None
+
+# Route utama index
 @app.route('/')
 def index():
-    search = request.args.get('search')  # Ambil parameter pencarian
-    if search:
-        query = "SELECT * FROM events WHERE title LIKE %s"
-        cursor.execute(query, ('%' + search + '%',))
-    else:
+    connection = get_db_connection()
+    if connection:
+        cursor = connection.cursor()
         cursor.execute("SELECT * FROM events")
-    events = cursor.fetchall()
-    return render_template('index.html', events=events)
+        events = cursor.fetchall()
+        cursor.close()
+        connection.close()
+        return render_template('index.html', events=events)
+    else:
+        return "Error connecting to database"
 
-@app.route('/detail/<int:event_id>')
-def detail(event_id):
-    cursor.execute("SELECT * FROM events WHERE id = %s", (event_id,))
-    event = cursor.fetchone()
-    return render_template('detail.html', event=event)
+# Detail acara
+@app.route('/event/<int:event_id>')
+def event_detail(event_id):
+    connection = get_db_connection()
+    if connection:
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM events WHERE event_id = %s", (event_id,))
+        event = cursor.fetchone()
+        cursor.close()
+        connection.close()
+        return render_template('detail.html', event=event)
+    else:
+        return "Error connecting to database"
 
-@app.route('/book/<int:event_id>', methods=['POST'])
-def book(event_id):
-    name = request.form['name']
-    email = request.form['email']
-    cursor.execute("INSERT INTO bookings (event_id, name, email) VALUES (%s, %s, %s)", (event_id, name, email))
-    conn.commit()
-    flash("Tiket berhasil dipesan!", "success")
-    return redirect(url_for('index'))
+# Route untuk pemesanan tiket
+@app.route('/book_ticket/<int:event_id>', methods=['GET', 'POST'])
+def book_ticket(event_id):
+    if request.method == 'POST':
+        user_name = request.form['user_name']
+        user_email = request.form['user_email']
+        ticket_count = request.form['ticket_count']
+        
+        connection = get_db_connection()
+        if connection:
+            cursor = connection.cursor()
+            cursor.execute("INSERT INTO booking (event_id, user_name, user_email, ticket_count, status) VALUES (%s, %s, %s, %s, %s)",
+                           (event_id, user_name, user_email, ticket_count, 'Booked'))
+            connection.commit()
+            cursor.close()
+            connection.close()
+            return redirect(url_for('index'))
+    return render_template('book_ticket.html', event_id=event_id)
 
-@app.route('/admin')
+# Route admin untuk menambahkan acara
+@app.route('/admin', methods=['GET', 'POST'])
 def admin():
-    cursor.execute("SELECT * FROM events")
-    events = cursor.fetchall()
-    return render_template('admin.html', events=events)
+    if request.method == 'POST':
+        event_name = request.form['event_name']
+        event_date = request.form['event_date']
+        event_time = request.form['event_time']
+        event_location = request.form['event_location']
+        available_tickets = request.form['available_tickets']
+        event_description = request.form['event_description']
 
-@app.route('/admin/add', methods=['POST'])
-def add_event():
-    title = request.form['title']
-    date = request.form['date']
-    location = request.form['location']
-    cursor.execute("INSERT INTO events (title, date, location) VALUES (%s, %s, %s)", (title, date, location))
-    conn.commit()
-    flash("Acara berhasil ditambahkan!", "success")
-    return redirect(url_for('admin'))
+        connection = get_db_connection()
+        if connection:
+            cursor = connection.cursor()
+            cursor.execute("""
+                INSERT INTO events (event_name, event_date, event_time, event_location, available_tickets, event_description)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            """, (event_name, event_date, event_time, event_location, available_tickets, event_description))
+            connection.commit()
+            cursor.close()
+            connection.close()
+            return redirect(url_for('admin'))
 
-@app.route('/admin/delete/<int:event_id>')
-def delete_event(event_id):
-    cursor.execute("DELETE FROM events WHERE id = %s", (event_id,))
-    conn.commit()
-    flash("Acara berhasil dihapus!", "success")
-    return redirect(url_for('admin'))
+    return render_template('admin.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

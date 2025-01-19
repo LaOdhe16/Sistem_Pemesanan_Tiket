@@ -1,42 +1,14 @@
-{% extends "base.html" %}
-{% block title %}Panel Admin{% endblock %}
-{% block content %}
-    <div class="admin-container">
-        <!-- Form untuk Menambah Acara Baru -->
-        <div class="form-card">
-            <h3>Tambah Acara Baru</h3>
-            <form action="/admin/add" method="POST">
-                <div class="form-group">
-                    <label for="title">Judul Acara:</label>
-                    <input type="text" id="title" name="title" required placeholder="Masukkan judul acara...">
-                </div>
-                <div class="form-group">
-                    <label for="date">Tanggal:</label>
-                    <input type="date" id="date" name="date" required>
-                </div>
-                <div class="form-group">
-                    <label for="location">Lokasi:</label>
-                    <input type="text" id="location" name="location" required placeholder="Masukkan lokasi acara...">
-                </div>
-                <div class="form-group">
-                    <button type="submit">Tambah Acara</button>
-                </div>
-            </form>
-        </div>
+{% extends 'base.html' %}
 
-        <!-- Daftar Acara yang Ada -->
-        <div class="events-list">
-            <h3>Daftar Acara</h3>
-            <div class="events">
-                {% for event in events %}
-                    <div class="card">
-                        <h3>{{ event[1] }}</h3>
-                        <p><strong>Tanggal:</strong> {{ event[2] }}</p>
-                        <p><strong>Lokasi:</strong> {{ event[3] }}</p>
-                        <a href="/detail/{{ event[0] }}" class="btn-detail">Detail Acara</a>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
+{% block content %}
+    <h1>Admin - Add Event</h1>
+    <form method="POST">
+        <input type="text" name="event_name" placeholder="Event Name" required><br>
+        <input type="date" name="event_date" placeholder="Event Date" required><br>
+        <input type="time" name="event_time" placeholder="Event Time" required><br>
+        <input type="text" name="event_location" placeholder="Event Location" required><br>
+        <input type="number" name="available_tickets" placeholder="Available Tickets" required><br>
+        <textarea name="event_description" placeholder="Event Description" required></textarea><br>
+        <button type="submit">Add Event</button>
+    </form>
 {% endblock %}
